@@ -86,7 +86,7 @@ Spectrogram {
 
 	stop {
 		runtask.stop;
-		fftSynth.free;
+		try{fftSynth.free };
 	}
 	
 	inbus_ {arg inbus;
@@ -110,7 +110,7 @@ SpectrogramWindow : Spectrogram {
 	*new { ^super.new }
 
 	createWindow {arg parent, bounds;
-		var startbutt, drawFreqs;
+		var startbutt, cper;
 		window = SCWindow("Spectrogram",  Rect(200, 450, 584, 328));
 		bounds = window.view.bounds.insetAll(30, 10, 10, 40); // resizable
 		image = SCImage.color(bounds.width, bufSize/2, background);
@@ -125,7 +125,6 @@ SpectrogramWindow : Spectrogram {
 					["Power", Color.black, Color.green.alpha_(0.2)]])
 			.action_({ arg view;
 				if(view.value == 1, { this.start }, { this.stop });
-				drawFreqs.value;
 			})
 			.font_(GUI.font.new("Helvetica", 10))
 			.resize_(3)
@@ -166,14 +165,13 @@ SpectrogramWindow : Spectrogram {
 				.font_(GUI.font.new("Helvetica", 10))
 				.align_(1);
 		});
+		CmdPeriod.add( cper = { this.stop; });
 		
-		CmdPeriod.add({			
-			startbutt.value_(0);
-		});
-
 		window.onClose_({
 			try{ fftSynth.free };
 			try{ fftbuf.free };
+			this.stop;
+			CmdPeriod.remove(cper);
 		}).front;
 	}
 	

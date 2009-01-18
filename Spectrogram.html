@@ -21,20 +21,17 @@ p.p11 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 12.0px Helv
 p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
 p.p13 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Helvetica}
 p.p14 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Helvetica; min-height: 17.0px}
-p.p15 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; color: #84322a}
-p.p16 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco}
-p.p17 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #a81914}
-p.p18 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0910ba}
+p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #95221c}
+p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0e17b6}
 span.s1 {font: 12.0px Helvetica}
 span.s2 {font: 18.0px Helvetica}
 span.s3 {color: #000000}
 span.s4 {text-decoration: underline}
-span.s5 {color: #1c23b3}
-span.s6 {color: #1a27ed}
-span.s7 {color: #131db2}
+span.s5 {color: #1f27af}
+span.s6 {color: #202de8}
+span.s7 {color: #1721ae}
 span.s8 {color: #606060}
-span.s9 {color: #84322a}
-span.s10 {color: #0910ba}
+span.s9 {color: #0e17b6}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
@@ -96,14 +93,8 @@ span.Apple-tab-span {white-space:pre}
 <p class="p8"><br></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>start</b></p>
 <p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
-<p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>starts the analysis and drawing.</p>
+<p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>starts analysis and drawing.</p>
 <p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
-<p class="p15"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// inline example</p>
-<p class="p16"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>g = <span class="s5">Spectrogram</span>.start;</p>
-<p class="p16"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>g.doSomething; <span class="s9">// explanation</span></p>
-<p class="p16"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>g.cleanUpMethod;</p>
-<p class="p8"><br></p>
-<p class="p8"><br></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>stop</b></p>
 <p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>stops analysis and drawing</p>
@@ -111,8 +102,8 @@ span.Apple-tab-span {white-space:pre}
 <p class="p8"><br></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>inbus_ (inbus)</b></p>
 <p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
-<p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>The audio bus of analysis.</p>
-<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>The audio bus of analysis.<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p8"><br></p>
 <p class="p8"><br></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>color_ (argcolor)</b></p>
 <p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
@@ -127,28 +118,28 @@ span.Apple-tab-span {white-space:pre}
 <p class="p13"><b>Examples</b></p>
 <p class="p4"><br></p>
 <p class="p4"><br></p>
-<p class="p17">// spectrogram in a window</p>
+<p class="p15">// spectrogram in a window</p>
 <p class="p12">(</p>
-<p class="p12">w = <span class="s10">SCWindow</span>.new(<span class="s8">"spee"</span>, <span class="s10">Rect</span>(10,10, 600, 300)).front;</p>
-<p class="p12">a = <span class="s10">Spectrogram</span>.new(w, <span class="s10">Rect</span>(101, 10, 400, 220));</p>
+<p class="p12">w = <span class="s9">SCWindow</span>.new(<span class="s8">"spee"</span>, <span class="s9">Rect</span>(10,10, 600, 300)).front;</p>
+<p class="p12">a = <span class="s9">Spectrogram</span>.new(w, <span class="s9">Rect</span>(101, 10, 400, 220));</p>
 <p class="p12">a.start;</p>
-<p class="p12">{<span class="s10">Saw</span>.ar(<span class="s10">LFNoise1</span>.kr(1).range(20,2250))}.play;</p>
+<p class="p12">{<span class="s9">Saw</span>.ar(<span class="s9">LFNoise1</span>.kr(1).range(20,2250))}.play;</p>
 <p class="p12">)</p>
 <p class="p4"><br></p>
 <p class="p4"><br></p>
-<p class="p17">// just a simple view for quick inspections of sound</p>
-<p class="p18"><span class="s3">a = </span>Spectrogram<span class="s3">.new;</span></p>
+<p class="p15">// just a simple view for quick inspections of sound</p>
+<p class="p16"><span class="s3">a = </span>Spectrogram<span class="s3">.new;</span></p>
 <p class="p12">a.start;</p>
-<p class="p17"><span class="s3">{</span><span class="s10">AudioIn</span><span class="s3">.ar(1)}.play </span>// feedback warning!</p>
+<p class="p15"><span class="s3">{</span><span class="s9">AudioIn</span><span class="s3">.ar(1)}.play </span>// feedback warning!</p>
 <p class="p4"><br></p>
 <p class="p12">a.intensity = 5;</p>
 <p class="p12">a.rate = 25</p>
-<p class="p12">a.color_(<span class="s10">Color</span>.red)</p>
+<p class="p12">a.color_(<span class="s9">Color</span>.red)</p>
 <p class="p4"><br></p>
 <p class="p4"><br></p>
-<p class="p17">// the spectrogram window</p>
-<p class="p18"><span class="s3">a = </span>SpectrogramWindow<span class="s3">.new</span></p>
-<p class="p12">{<span class="s10">LPF</span>.ar(<span class="s10">WhiteNoise</span>.ar(1), <span class="s10">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
+<p class="p15">// the spectrogram window</p>
+<p class="p16"><span class="s3">a = </span>SpectrogramWindow<span class="s3">.new</span></p>
+<p class="p12">{<span class="s9">LPF</span>.ar(<span class="s9">WhiteNoise</span>.ar(1), <span class="s9">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
 <p class="p4"><br></p>
 <p class="p4"><br></p>
 <p class="p4"><br></p>
