@@ -6,14 +6,15 @@ Spectrogram {
 	var <fftbuf, fftDataArray, fftSynth;
 	var inbus, <>rate;
 	var <bufSize;	// size of FFT
+	var <frombin, <tobin;
 	var image, index, <>intensity, runtask;
-	var color, background;
+	var color, background, colints; // colints is an array of integers each representing a colour
 		
-	*new { arg parent, bounds, bufSize, color, background;
-		^super.new.initSpectrogram(parent, bounds, bufSize, color, background);
+	*new { arg parent, bounds, bufSize, color, background, frombin=0, tobin=inf;
+		^super.new.initSpectrogram(parent, bounds, bufSize, color, background, frombin, tobin);
 	}
 	
-	initSpectrogram { arg parent, bounds, bufsize, col, bg;
+	initSpectrogram { arg parent, bounds, bufsize, col, bg, frombinarg, tobinarg;
 		server = Server.default;
 		inbus=0;
 		rate = 25; // updates per second
@@ -24,6 +25,8 @@ Spectrogram {
 		intensity = 5;
 		background = bg ? Color.black; // not implemented yet
 		color = col ? Color(1, 1, 1); // white by default
+		frombin = max(frombinarg, 0);
+		tobin = min(tobinarg, bufSize - 1);
 		this.sendSynthDef;
 		this.createWindow(parent, bounds);
 	}
@@ -58,16 +61,7 @@ Spectrogram {
 	}
 		
 	start {
-		var colours, colints;
-		colours = (0..16).collect{|val| blend(background, color, val/16)};
-		colints = colours.collect{|col|
-			Integer.fromRGBA(
-				(col.red * 255 ).asInteger, 
-				(col.green * 255).asInteger, 
-				(col.blue * 255 ).asInteger, 
-				255);
-		};
-		colours.postln;
+		this.recalcGradient;
 		{
 		runtask = Task({ 
 			fftSynth = Synth(\spectroscope, [\inbus, inbus, \buffer, fftbuf]);
@@ -102,14 +96,27 @@ Spectrogram {
 
 	color_ {arg argcolor;
 		color = argcolor;
+		this.recalcGradient;
 	}	
 	
 	background_ {arg argbackground;
 		image.free;
 		background = argbackground;
 		image = SCImage.color(window.bounds.width, bufSize/2, background);
+		this.recalcGradient;
 	}
 	
+	recalcGradient {
+		var colours;
+		colours = (0..16).collect{|val| blend(background, color, val/16)};
+		colints = colours.collect{|col|
+			Integer.fromRGBA(
+				(col.red * 255 ).asInteger, 
+				(col.green * 255).asInteger, 
+				(col.blue * 255 ).asInteger, 
+				255);
+		};
+	}
 }
 
 SpectrogramWindow : Spectrogram {
