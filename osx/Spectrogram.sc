@@ -58,6 +58,16 @@ Spectrogram {
 	}
 		
 	start {
+		var colours, colints;
+		colours = (0..16).collect{|val| blend(background, color, val/16)};
+		colints = colours.collect{|col|
+			Integer.fromRGBA(
+				(col.red * 255 ).asInteger, 
+				(col.green * 255).asInteger, 
+				(col.blue * 255 ).asInteger, 
+				255);
+		};
+		colours.postln;
 		{
 		runtask = Task({ 
 			fftSynth = Synth(\spectroscope, [\inbus, inbus, \buffer, fftbuf]);
@@ -70,11 +80,8 @@ Spectrogram {
 					).magnitude.reverse*2).clip(0, 255);
 				complexarray.do({ |val, i|
 					val = val * intensity;
-				fftDataArray[i] =ÊInteger.fromRGBA(
-										(val*color.red).asInteger, 
-										(val*color.green).asInteger, 
-										(val*color.blue).asInteger,
-										255);
+				fftDataArray[i] = colints.clipAt((val / 16).round);
+
 			});
 				{ window.refresh }.defer;
 			}); 
