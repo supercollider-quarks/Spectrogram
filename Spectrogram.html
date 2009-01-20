@@ -5,13 +5,13 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <title></title>
 <meta name="Generator" content="Cocoa HTML Writer">
-<meta name="CocoaVersion" content="949.42">
+<meta name="CocoaVersion" content="824.48">
 <style type="text/css">
 p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px Helvetica}
 p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
 p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
 p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
-p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #0b15e8}
+p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #0021e7}
 p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; min-height: 17.0px}
 p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica}
 p.p8 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; min-height: 12.0px}
@@ -20,18 +20,21 @@ p.p10 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helv
 p.p11 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 12.0px Helvetica}
 p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
 p.p13 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Helvetica}
-p.p14 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Helvetica; min-height: 17.0px}
-p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #95221c}
-p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0e17b6}
+p.p14 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica; color: #000000; min-height: 14.0px}
+p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000}
+p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p17 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #bf0000}
+p.p18 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0000bf}
 span.s1 {font: 12.0px Helvetica}
 span.s2 {font: 18.0px Helvetica}
 span.s3 {color: #000000}
 span.s4 {text-decoration: underline}
-span.s5 {color: #1f27af}
-span.s6 {color: #202de8}
-span.s7 {color: #1721ae}
-span.s8 {color: #606060}
-span.s9 {color: #0e17b6}
+span.s5 {color: #1a2faa}
+span.s6 {color: #1739e2}
+span.s7 {color: #0000ff}
+span.s8 {color: #102aa9}
+span.s9 {color: #606060}
+span.s10 {color: #0000bf}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
@@ -53,18 +56,19 @@ span.Apple-tab-span {white-space:pre}
 <p class="p3"><br></p>
 <p class="p7"><b>Creation / Class Methods</b></p>
 <p class="p8"><br></p>
-<p class="p9"><b><span class="Apple-tab-span">	</span>*new (parent, bounds, bufSize, color, background)</b></p>
+<p class="p9"><b><span class="Apple-tab-span">	</span>*new (parent, bounds, bufSize, color, background, frombin, tobin)</b></p>
 <p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>Short prose description of method.</p>
-<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>parent </b>- a Window (optional).</p>
-<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>bounds </b>- a Rect where the spectrogram appears in the parent (optional).</p>
-<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>bufSize </b>- frames in FFT window. default: 1024. Use power of 2 sizes, such as 512 or 2048.</p>
-<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>color </b>- The color drawn.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>parent </b>- a <a href="SC://Window"><span class="s7">Window</span></a> (optional).</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>bounds </b>- a <a href="SC://Rect"><span class="s7">Rect</span></a> where the spectrogram appears in the parent (optional).</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>bufSize </b>- frames in FFT window. default: 1024. Use power-of-2 sizes, such as 512 or 2048.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>color</b>, <b>background</b> - the foreground and background <a href="SC://Color"><span class="s7">Color</span></a>s.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>frombin</b>, <b>tobin</b> - optionally you can specify the integer range of bins you want to visualise.</p>
 <p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>w = <span class="s7">SCWindow</span>.new(<span class="s8">"testing spectrogram"</span>, <span class="s7">Rect</span>(10,10, 600, 300)).front;</p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a = <span class="s7">Spectrogram</span>.new(w, <span class="s7">Rect</span>(101, 10, 400, 220));</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>w = <span class="s8">SCWindow</span>.new(<span class="s9">"testing spectrogram"</span>, <span class="s8">Rect</span>(10,10, 600, 300)).front;</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a = <span class="s8">Spectrogram</span>.new(w, <span class="s8">Rect</span>(101, 10, 400, 220));</p>
 <p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.start;</p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s7">Saw</span>.ar(<span class="s7">LFNoise1</span>.kr(1).range(20,2250))}.play</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s8">Saw</span>.ar(<span class="s8">LFNoise1</span>.kr(1).range(20,2250))}.play</p>
 <p class="p8"><br></p>
 <p class="p8"><br></p>
 <p class="p13"><b>Accessing Instance and Class Variables</b></p>
@@ -72,76 +76,71 @@ span.Apple-tab-span {white-space:pre}
 <p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>rate_(arg1)</b></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>rate</b></p>
-<p class="p10"><b><span class="Apple-tab-span">	</span></b><span class="Apple-tab-span">	</span></p>
 <p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Refresh rate. Default is 25 frames per second<span class="Apple-converted-space"> </span></p>
 <p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>bufSize</b></p>
-<p class="p10"><b><span class="Apple-tab-span">	</span></b><span class="Apple-tab-span">	</span></p>
 <p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>frames in FFT window. see above.</p>
 <p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>intensity_(arg1)</b></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>intensity</b></p>
-<p class="p10"><b><span class="Apple-tab-span">	</span></b><span class="Apple-tab-span">	</span></p>
 <p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Intensity is how strong the drawn color is.</p>
 <p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Default value is 5.</p>
 <p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
-<p class="p13"><b>Doing Some Task (optional)</b></p>
-<p class="p14"><br></p>
-<p class="p9">A short bit of prose explaining something about the task.</p>
+<p class="p13"><b>Instance methods</b></p>
 <p class="p10"><span class="Apple-tab-span">	</span></p>
 <p class="p8"><br></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>start</b></p>
-<p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>starts analysis and drawing.</p>
 <p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>stop</b></p>
-<p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>stops analysis and drawing</p>
 <p class="p8"><br></p>
 <p class="p8"><br></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>inbus_ (inbus)</b></p>
-<p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>The audio bus of analysis.<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p8"><br></p>
 <p class="p8"><br></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span>color_ (argcolor)</b></p>
-<p class="p10"><b><span class="Apple-tab-span">	</span></b></p>
 <p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>The color that is drawn.</p>
-<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a = <span class="s7">Spectrogram</span>.new( color: <span class="s7">Color</span>.red);</p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s7">LPF</span>.ar(<span class="s7">WhiteNoise</span>.ar(1), <span class="s7">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
-<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.start;</p>
+<p class="p9"><b><span class="Apple-tab-span">	</span>background_ (argcolor)</b></p>
+<p class="p9"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>The background color.</p>
+<p class="p14"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p15"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a = <span class="s10">Spectrogram</span>.new( color: <span class="s10">Color</span>.red);</p>
+<p class="p15"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s10">LPF</span>.ar(<span class="s10">WhiteNoise</span>.ar(1), <span class="s10">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
+<p class="p15"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.start;</p>
+<p class="p15"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.background_(<span class="s10">Color</span>.blue);</p>
+<p class="p15"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.color_(<span class="s10">Color</span>.white);</p>
 <p class="p8"><br></p>
 <p class="p8"><br></p>
 <p class="p8"><br></p>
 <p class="p13"><b>Examples</b></p>
-<p class="p4"><br></p>
-<p class="p4"><br></p>
-<p class="p15">// spectrogram in a window</p>
-<p class="p12">(</p>
-<p class="p12">w = <span class="s9">SCWindow</span>.new(<span class="s8">"spee"</span>, <span class="s9">Rect</span>(10,10, 600, 300)).front;</p>
-<p class="p12">a = <span class="s9">Spectrogram</span>.new(w, <span class="s9">Rect</span>(101, 10, 400, 220));</p>
-<p class="p12">a.start;</p>
-<p class="p12">{<span class="s9">Saw</span>.ar(<span class="s9">LFNoise1</span>.kr(1).range(20,2250))}.play;</p>
-<p class="p12">)</p>
-<p class="p4"><br></p>
-<p class="p4"><br></p>
-<p class="p15">// just a simple view for quick inspections of sound</p>
-<p class="p16"><span class="s3">a = </span>Spectrogram<span class="s3">.new;</span></p>
-<p class="p12">a.start;</p>
-<p class="p15"><span class="s3">{</span><span class="s9">AudioIn</span><span class="s3">.ar(1)}.play </span>// feedback warning!</p>
-<p class="p4"><br></p>
-<p class="p12">a.intensity = 5;</p>
-<p class="p12">a.rate = 25</p>
-<p class="p12">a.color_(<span class="s9">Color</span>.red)</p>
-<p class="p4"><br></p>
-<p class="p4"><br></p>
-<p class="p15">// the spectrogram window</p>
-<p class="p16"><span class="s3">a = </span>SpectrogramWindow<span class="s3">.new</span></p>
-<p class="p12">{<span class="s9">LPF</span>.ar(<span class="s9">WhiteNoise</span>.ar(1), <span class="s9">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
-<p class="p4"><br></p>
-<p class="p4"><br></p>
-<p class="p4"><br></p>
+<p class="p16"><br></p>
+<p class="p16"><br></p>
+<p class="p17">// spectrogram in a window</p>
+<p class="p15">(</p>
+<p class="p15">w = <span class="s10">SCWindow</span>.new(<span class="s9">"spee"</span>, <span class="s10">Rect</span>(10,10, 600, 300)).front;</p>
+<p class="p15">a = <span class="s10">Spectrogram</span>.new(w, <span class="s10">Rect</span>(101, 10, 400, 220));</p>
+<p class="p15">a.start;</p>
+<p class="p15">{<span class="s10">Saw</span>.ar(<span class="s10">LFNoise1</span>.kr(1).range(20,2250))}.play;</p>
+<p class="p15">)</p>
+<p class="p16"><br></p>
+<p class="p16"><br></p>
+<p class="p17">// just a simple view for quick inspections of sound</p>
+<p class="p18"><span class="s3">a = </span>Spectrogram<span class="s3">.new;</span></p>
+<p class="p15">a.start;</p>
+<p class="p17"><span class="s3">{</span><span class="s10">AudioIn</span><span class="s3">.ar(1)}.play </span>// feedback warning!</p>
+<p class="p16"><br></p>
+<p class="p15">a.intensity = 5;</p>
+<p class="p15">a.rate = 25</p>
+<p class="p15">a.color_(<span class="s10">Color</span>.red)</p>
+<p class="p16"><br></p>
+<p class="p16"><br></p>
+<p class="p17">// the spectrogram window</p>
+<p class="p18"><span class="s3">a = </span>SpectrogramWindow<span class="s3">.new</span></p>
+<p class="p15">{<span class="s10">LPF</span>.ar(<span class="s10">WhiteNoise</span>.ar(1), <span class="s10">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
+<p class="p16"><br></p>
+<p class="p16"><br></p>
+<p class="p16"><br></p>
 </body>
 </html>

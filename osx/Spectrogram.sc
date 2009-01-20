@@ -20,13 +20,13 @@ Spectrogram {
 		rate = 25; // updates per second
 		bufSize = bufsize ? 1024;
 		fftbuf = Buffer.alloc(server, bufSize);
-		fftDataArray = Int32Array.fill(bufSize, 0);
 		index = 0;
 		intensity = 5;
-		background = bg ? Color.black; // not implemented yet
+		background = bg ? Color.black;
 		color = col ? Color(1, 1, 1); // white by default
 		frombin = max(frombinarg, 0);
-		tobin = min(tobinarg, bufSize - 1);
+		tobin = min(tobinarg, bufSize / 2 - 1);
+		fftDataArray = Int32Array.fill((tobin - frombin + 1).postln, 0);
 		this.sendSynthDef;
 		this.createWindow(parent, bounds);
 	}
@@ -35,7 +35,7 @@ Spectrogram {
 		window = parent ? SCWindow("Spectrogram",  Rect(200, 450, 600, 300));
 		bounds = bounds ? window.view.bounds;
 		[\bounds, bounds].postln;
-		image = SCImage.color(bounds.width, bufSize/2, background);
+		image = SCImage.color(bounds.width, (tobin - frombin + 1), background);
 		window.drawHook_({
 			index = index+1;
 			image.drawInRect(bounds, image.bounds, 2, 1.0);
@@ -45,7 +45,7 @@ Spectrogram {
 				});
 			}, {
 				// this cuts off the bottom when graph is a view in a scwindow
-				image.setPixels(fftDataArray, Rect(index%image.bounds.width, 0, 1, bufSize/2));
+				image.setPixels(fftDataArray, Rect(index%image.bounds.width, 0, 1, (tobin - frombin + 1)));
 			});
 		})
 		.onClose_({
@@ -65,20 +65,21 @@ Spectrogram {
 		{
 		runtask = Task({ 
 			fftSynth = Synth(\spectroscope, [\inbus, inbus, \buffer, fftbuf]);
-			{ fftbuf.getn(0, bufSize, { arg buf;
-				var magarray, complexarray;
-				magarray = buf.clump(2).flop;
-				complexarray = (Complex( 
-						Signal.newFrom( magarray[0] ), 
-						Signal.newFrom( magarray[1] ) 
-					).magnitude.reverse*2).clip(0, 255);
-				complexarray.do({ |val, i|
-					val = val * intensity;
-				fftDataArray[i] = colints.clipAt((val / 16).round);
-
-			});
-				{ window.refresh }.defer;
-			}); 
+			{
+				fftbuf.getn(0, bufSize, 
+				{ arg buf;
+					var magarray, complexarray;
+					magarray = buf.clump(2)[(frombin .. tobin)].flop;
+					complexarray = (Complex( 
+							Signal.newFrom( magarray[0] ), 
+							Signal.newFrom( magarray[1] ) 
+						).magnitude.reverse*2).clip(0, 255);
+					complexarray.do{	 |val, i|
+						val = val * intensity;
+						fftDataArray[i] = colints.clipAt((val / 16).round);
+					};
+					{ window.refresh }.defer;
+				}); 
 			rate.reciprocal.wait;
 			}.loop 
 		}).start;
