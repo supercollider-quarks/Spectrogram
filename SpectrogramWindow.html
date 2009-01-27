@@ -10,18 +10,23 @@
 p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
 p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
 p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
-p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #0000ff}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #0b15e8}
 p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica}
 p.p6 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; min-height: 12.0px}
 p.p7 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica}
 p.p8 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica; min-height: 14.0px}
-p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #762c25}
-p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #1721ae}
-p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
-p.p12 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Helvetica; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #bf0000}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0000bf}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
+p.p14 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Helvetica; min-height: 17.0px}
 span.s1 {font: 18.0px Helvetica}
 span.s2 {color: #000000}
-span.s3 {color: #1721ae}
+span.s3 {text-decoration: underline}
+span.s4 {color: #0c16f9}
+span.s5 {text-decoration: underline ; color: #0b15e8}
+span.s6 {color: #0000bf}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
@@ -41,7 +46,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p1">range -<span class="Apple-tab-span">	</span>The Frequency range displayed in the window. Values are scaled to bin frequencies (depending on window size).</p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
-<p class="p4"><span class="s2"><b>See also:</b> <a href="../Library/Application Support/SuperCollider/quarks/Spectrogram/Spectrogram.html">Spectrogram</a></span>, <a href="SC://SCFreqScopeWindow">SCFreqScopeWindow</a></p>
+<p class="p4"><span class="s2"><b>See also:</b> <a href="../Library/Application Support/SuperCollider/quarks/Spectrogram/Spectrogram.html"><span class="s3">Spectrogram</span></a></span><span class="s4">, <a href="SC://SCFreqScopeWindow"><span class="s5">SCFreqScopeWindow</span></a></span></p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
 <p class="p5"><b>Creation / Class Methods</b></p>
@@ -50,12 +55,19 @@ span.Apple-tab-span {white-space:pre}
 <p class="p8"><b><span class="Apple-tab-span">	</span></b></p>
 <p class="p7"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>Short prose description of method.</p>
 <p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
-<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>// the special spectrogram window (like FreqScope)</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// the special spectrogram window (like FreqScope)</p>
 <p class="p10"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a = </span>SpectrogramWindow<span class="s2">.new;</span></p>
-<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s3">LPF</span>.ar(<span class="s3">WhiteNoise</span>.ar(1), <span class="s3">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s6">LPF</span>.ar(<span class="s6">WhiteNoise</span>.ar(1), <span class="s6">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p3"><br></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>// spectrogram is also added as a method to Function, thus:</p>
+<p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s6">LPF</span>.ar(<span class="s6">WhiteNoise</span>.ar(1), <span class="s6">LFNoise1</span>.kr(1).range(20,12250))}.spectrogram;</p>
 <p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
-<p class="p6"><br></p>
-<p class="p6"><br></p>
-<p class="p12"><b></b><br></p>
+<p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s6">Saw</span>.ar(<span class="s6">MouseX</span>.kr(1, 1000))}.spectrogram;</p>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p14"><br></p>
 </body>
 </html>

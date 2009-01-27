@@ -1,6 +1,5 @@
 
 Spectrogram {
-
 	classvar <server;
 	var window, bounds;
 	var <fftbuf, fftDataArray, fftSynth;
@@ -44,7 +43,7 @@ Spectrogram {
 			});
 		});
 		window.onClose_({
-			this.stop;
+			this.stopruntask;
 			fftbuf.free;
 		}).front;
 	}
@@ -55,7 +54,7 @@ Spectrogram {
 		}).send(server);
 	}
 		
-	start {
+	startruntask {
 		this.recalcGradient;
 		{
 			runtask = Task({ 
@@ -81,7 +80,7 @@ Spectrogram {
 		}.defer(0.1); // allow the creation of fftbuf before starting
 	}
 
-	stop {
+	stopruntask {
 		runtask.stop;
 		try{fftSynth.free };
 	}
@@ -117,10 +116,10 @@ Spectrogram {
 	
 	setBufSize_ {arg buffersize, restart=true;
 		if(buffersize.isPowerOfTwo, {
-			this.stop;
+			this.stopruntask;
 			bufSize = buffersize;
 			try {fftbuf.free};
-			fftbuf = Buffer.alloc(server, bufSize, 1, { if(restart, {this.start}) }) ;
+			fftbuf = Buffer.alloc(server, bufSize, 1, { if(restart, {this.startruntask}) }) ;
 			binfreqs = bufSize.collect({|i| ((server.sampleRate/2)/bufSize)*(i+1) });
 			tobin = bufSize / 2 - 1;
 			frombin = 0;
@@ -138,18 +137,24 @@ Spectrogram {
 			index = index + 1;
 			image.drawInRect(window.view.bounds.insetAll(30, 10, 42, 10), image.bounds, 2, 1.0);
 			image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1))) ;
-			// fftDataArray.do({arg val, ind; image.setPixel(val,Êindex%bounds.width, ind) }); // older version
+			// fftDataArray.do({arg val, ind; image.setPixel(val,Êindex%bounds.width, ind) });
 		});
 	}
 }
 
-SpectrogramWindow : Spectrogram {
-
-	*new { ^super.new }
+SpectrogramWindow : Spectrogram { 
+	classvar <scopeOpen;
+	var startbutt;
+	
+	*new { 
+		if(scopeOpen != true, { // block the stacking up of scope windows
+			^super.new;
+		})
+	}
 
 	createWindow {
-		var startbutt, cper, font;
-		var highfreq, lowfreq, rangeslider, freqtextarray;
+		var cper, font;
+		var highfreq, lowfreq, rangeslider, freqtextarray;		scopeOpen = true;
 		window = Window("Spectrogram",  Rect(200, 450, 584, 328));
 		bounds = window.view.bounds.insetAll(30, 10, 10, 40); // resizable
 		font = Font("Helvetica", 10);
@@ -158,7 +163,7 @@ SpectrogramWindow : Spectrogram {
 		startbutt = Button(window, Rect(545, 10, 36, 16))
 			.states_([["Power", Color.black, Color.clear], 
 					 ["Power", Color.black, Color.green.alpha_(0.2)]])
-			.action_({ arg view; if(view.value == 1, { this.start }, { this.stop }) })
+			.action_({ arg view; if(view.value == 1, { this.startruntask }, { this.stopruntask }) })
 			.font_(font)
 			.resize_(3)
 			.canFocus_(false);
@@ -260,13 +265,32 @@ SpectrogramWindow : Spectrogram {
 				.align_(1);
 		});
 		
-		CmdPeriod.add( cper = { this.stop; });
+		CmdPeriod.add( cper = { 
+			if(startbutt.value == 1, {
+				startbutt.valueAction_(0);
+				AppClock.sched(0.5, { startbutt.valueAction_(1) });
+			});
+		 });
 		
 		window.onClose_({
 			try{ fftSynth.free };
 			try{ fftbuf.free };
-			this.stop;
+			scopeOpen = false; 
+			this.stopruntask;
 			CmdPeriod.remove(cper);
 		}).front;
+	}
+	
+	start {
+		{startbutt.valueAction_(1)}.defer(0.5);
+	}
+}
+
++ Function {
+	spectrogram {
+		this.play;
+		if(SpectrogramWindow.scopeOpen != true, {
+			SpectrogramWindow.new.start;
+		});
 	}
 }
