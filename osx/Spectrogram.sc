@@ -102,18 +102,6 @@ Spectrogram {
 		this.recalcGradient;
 	}
 	
-	recalcGradient {
-		var colors;
-		colors = (0..16).collect{|val| blend(background, color, val/16)};
-		colints = colors.collect{|col|
-			Integer.fromRGBA(
-				(col.red * 255 ).asInteger, 
-				(col.green * 255).asInteger, 
-				(col.blue * 255 ).asInteger, 
-				(col.alpha * 255 ).asInteger);
-		};
-	}
-	
 	setBufSize_ {arg buffersize, restart=true;
 		if(buffersize.isPowerOfTwo, {
 			this.stopruntask;
@@ -128,6 +116,18 @@ Spectrogram {
 		}, {
 			"Buffersize has to be power of two (256, 1024, 2048, etc.)".warn;
 		});
+	}
+
+	recalcGradient {
+		var colors;
+		colors = (0..16).collect{|val| blend(background, color, val/16)};
+		colints = colors.collect{|col|
+			Integer.fromRGBA(
+				(col.red * 255 ).asInteger, 
+				(col.green * 255).asInteger, 
+				(col.blue * 255 ).asInteger, 
+				(col.alpha * 255 ).asInteger);
+		};
 	}
 	
 	setWindowImage {
@@ -235,12 +235,13 @@ SpectrogramWindow : Spectrogram {
 				hifreq = (slider.hi*(server.sampleRate/2)).nearestInList(binfreqs).round(1);
 				lowfreq.value_( lofreq );
 				highfreq.value_( hifreq );
-				frombin = max( (slider.lo * (bufSize/2)).round(1), 0);
-				tobin = min( (slider.hi * (bufSize/2)).round(1), bufSize/2 -1);
+				frombin = max( (slider.lo * (bufSize/2)).round(0.1), 0);
+				tobin = min( (slider.hi * (bufSize/2)).round(0.1), bufSize/2 -1);
 				spec = [lofreq, hifreq].asSpec;
 				freqtextarray.do({|view, i|
 					var val;
-					val = ((spec.map(0.1*(10-i))/1000).round(1)).asString++"k"; 
+					val = ((spec.map(0.1*(10-i))/1000).round(0.1)).asString; 
+					if(val.contains(".").not, { val = val++".0"});
 					view.string_(val); 
 				});
 				this.setWindowImage;
@@ -260,8 +261,14 @@ SpectrogramWindow : Spectrogram {
 		// this needs fixing - (will be fixed when .onResize_({}) will be available for windows
 		freqtextarray = Array.fill(11, { arg i;
 			StaticText(window, Rect(5, 10+(i*(window.bounds.height/11)), 20, 10))
-				.string_(((((server.sampleRate/2) / 10000)*(10-i)).round(1)).asString++"k")
-				.font_(font)
+				.string_(
+					if(((((server.sampleRate/2) / 10000)*(10-i)).round(0.1)).asString.contains("."), {
+						((((server.sampleRate/2) / 10000)*(10-i)).round(0.1)).asString;
+					},{
+						((((server.sampleRate/2) / 10000)*(10-i)).round(0.1)).asString++".0";
+					});				
+				)
+				.font_(Font("Helvetica", 9))
 				.align_(1);
 		});
 		
