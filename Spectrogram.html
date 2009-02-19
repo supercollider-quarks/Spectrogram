@@ -17,21 +17,24 @@ p.p7 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco
 p.p8 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica}
 p.p9 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica; min-height: 14.0px}
 p.p10 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 12.0px Helvetica}
-p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #58332c}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #52342d}
 p.p12 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco}
 p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
 p.p14 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Helvetica}
-p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #a81914}
-p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0910ba}
-p.p17 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #a81914; min-height: 12.0px}
+p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #95221c}
+p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0e17b6}
+p.p17 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #bf0000}
+p.p18 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000}
+p.p19 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #95221c; min-height: 12.0px}
 span.s1 {font: 18.0px Helvetica}
 span.s2 {color: #000000}
-span.s3 {color: #0c16f9}
+span.s3 {color: #1320f3}
 span.s4 {text-decoration: underline}
-span.s5 {text-decoration: underline ; color: #2c37ca}
-span.s6 {color: #222ba2}
+span.s5 {text-decoration: underline ; color: #303ac6}
+span.s6 {color: #252e9e}
 span.s7 {color: #606060}
-span.s8 {color: #0910ba}
+span.s8 {color: #0e17b6}
+span.s9 {color: #0000bf}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
@@ -115,7 +118,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a = <span class="s6">Spectrogram</span>.new( color: <span class="s6">Color</span>.red);</p>
 <p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s6">LPF</span>.ar(<span class="s6">WhiteNoise</span>.ar(1), <span class="s6">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
 <p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.start;</p>
-<p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.background_(<span class="s6">Color</span>.blue);</p>
+<p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.background_(<span class="s6">Color</span>.blue.alpha_(0.2));</p>
 <p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.color_(<span class="s6">Color</span>.white);</p>
 <p class="p7"><br></p>
 <p class="p7"><br></p>
@@ -156,7 +159,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p3"><br></p>
 <p class="p3"><br></p>
 <p class="p3"><br></p>
-<p class="p15">// an example showing where the low and high frequencies are scaled</p>
+<p class="p15">// an example showing where the low and high frequencies are scaled and large bufsize (FFT window)</p>
 <p class="p13">(</p>
 <p class="p13">w = <span class="s8">SCWindow</span>.new(<span class="s7">"spee"</span>, <span class="s8">Rect</span>(10,10, 600, 300)).front;</p>
 <p class="p13">a = <span class="s8">Spectrogram</span>.new(w, <span class="s8">Rect</span>(101, 10, 400, 300), bufSize: 2048, lowfreq:1000, highfreq:10000);</p>
@@ -174,9 +177,10 @@ span.Apple-tab-span {white-space:pre}
 <p class="p13">{<span class="s8">SinOsc</span>.ar(<span class="s8">MouseY</span>.kr(22050, 1).poll(10, <span class="s7">"frequency: "</span>))}.play</p>
 <p class="p13">)</p>
 <p class="p3"><br></p>
-<p class="p15">// analogously to .scope and .freqscope, spectrogram is also added as a method to Function, thus:</p>
-<p class="p1">{LFNoise1.ar(MouseX.kr(10, 2000)) * SinOsc.ar(MouseY.kr(5000, 1000, 1))}.spectrogram</p>
-<p class="p17"><br></p>
+<p class="p3"><br></p>
+<p class="p17">// analogously to .scope and .freqscope, spectrogram is also added as a method to Function, thus:</p>
+<p class="p18">{<span class="s9">LFNoise1</span>.ar(<span class="s9">MouseX</span>.kr(10, 2000)) * <span class="s9">SinOsc</span>.ar(<span class="s9">MouseY</span>.kr(5000, 1000, 1))}.spectrogram</p>
+<p class="p19"><br></p>
 <p class="p13">{<span class="s8">LPF</span>.ar(<span class="s8">WhiteNoise</span>.ar(1), <span class="s8">LFNoise1</span>.kr(1).range(20,12250))}.spectrogram;</p>
 <p class="p3"><br></p>
 <p class="p13">{<span class="s8">Saw</span>.ar(<span class="s8">MouseX</span>.kr(1, 1000))}.spectrogram;</p>

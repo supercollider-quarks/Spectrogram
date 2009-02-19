@@ -140,6 +140,11 @@ Spectrogram {
 			// fftDataArray.do({arg val, ind; image.setPixel(val,Êindex%bounds.width, ind) });
 		});
 	}
+	
+	start { this.startruntask }
+	
+	stop { this.stopruntask }
+	
 }
 
 SpectrogramWindow : Spectrogram { 
@@ -147,9 +152,9 @@ SpectrogramWindow : Spectrogram {
 	var startbutt;
 	
 	*new { 
-		if(scopeOpen != true, { // block the stacking up of scope windows
+		//if(scopeOpen != true, { // block the stacking up of scope windows
 			^super.new;
-		})
+		//})
 	}
 
 	createWindow {
@@ -289,7 +294,12 @@ SpectrogramWindow : Spectrogram {
 	}
 	
 	start {
+		"start butt".postln;
 		{startbutt.valueAction_(1)}.defer(0.5);
+	}
+	
+	stop {
+		{startbutt.valueAction_(0)}.defer(0.5);
 	}
 }
 
