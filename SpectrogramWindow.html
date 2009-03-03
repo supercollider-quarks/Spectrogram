@@ -10,24 +10,24 @@
 p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
 p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
 p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
-p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #232fd4}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #2c37ca}
 p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica}
 p.p6 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; min-height: 12.0px}
 p.p7 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica}
 p.p8 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Helvetica; min-height: 14.0px}
-p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #95221c}
-p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0e17b6}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #762c25}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #1721ae}
 p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
-p.p12 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; color: #95221c}
-p.p13 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; color: #0e17b6}
+p.p12 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; color: #762c25}
+p.p13 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; color: #1721ae}
 p.p14 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco}
 p.p15 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Helvetica; min-height: 17.0px}
 span.s1 {font: 18.0px Helvetica}
 span.s2 {color: #000000}
-span.s3 {text-decoration: underline ; color: #1e2ad9}
-span.s4 {color: #2532e3}
-span.s5 {text-decoration: underline ; color: #232fd4}
-span.s6 {color: #0e17b6}
+span.s3 {text-decoration: underline ; color: #2833cf}
+span.s4 {color: #2e3ad9}
+span.s5 {text-decoration: underline ; color: #2c37ca}
+span.s6 {color: #1721ae}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
@@ -38,6 +38,8 @@ span.Apple-tab-span {white-space:pre}
 <p class="p1"><b>Inherits from: Object : Spectrogram</b></p>
 <p class="p3"><br></p>
 <p class="p1">The SpectrogramWindow shows the specrum of a sound of a specified audio bus. It can be resized.</p>
+<p class="p1">By clicking on the view, a crosshair cursor appears that indicates the frequency underneith.</p>
+<p class="p2"><br></p>
 <p class="p2"><br></p>
 <p class="p1">Panel commands:</p>
 <p class="p1">Power - <span class="Apple-tab-span">	</span>Turns the scope on and off.</p>
@@ -78,12 +80,26 @@ span.Apple-tab-span {white-space:pre}
 <p class="p7"><b><span class="Apple-tab-span">	</span>*stop</b></p>
 <p class="p3"><br></p>
 <p class="p6"><br></p>
+<p class="p7"><b><span class="Apple-tab-span">	</span>color_ (argcolor)</b></p>
+<p class="p7"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>The color that is drawn.</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p7"><b><span class="Apple-tab-span">	</span>background_ (argcolor)</b></p>
+<p class="p7"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>The background color.</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b><span class="Apple-tab-span">	</span>crosshairColor_ (argcolor)</b></p>
+<p class="p7"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>The color of the frequency info crosshair cursor.</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
 <p class="p12"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// as the SpectrogramWindow inherets from Spectrogram, we can change colors</p>
 <p class="p13"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a = </span>SpectrogramWindow<span class="s2">.new;</span></p>
 <p class="p14"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s6">LPF</span>.ar(<span class="s6">WhiteNoise</span>.ar(1), <span class="s6">LFNoise1</span>.kr(1).range(20,12250))}.play;</p>
 <p class="p14"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.start;</p>
 <p class="p14"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.color_(<span class="s6">Color</span>.red);</p>
 <p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.background_(<span class="s6">Color</span>.white);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.crosshairColor_(Color.black); // click and drag on the view</p>
 <p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.stop;</p>
 <p class="p6"><br></p>
 <p class="p15"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
