@@ -8,7 +8,6 @@ Spectrogram {
 	var <frombin, <tobin;
 	var image, index, <>intensity, runtask;
 	var color, background, colints; // colints is an array of integers each representing a color
-	var inwindow;
 	
 	*new { arg parent, bounds, bufSize, color, background, lowfreq=0, highfreq=inf;
 		^super.new.initSpectrogram(parent, bounds, bufSize, color, background, lowfreq, highfreq);
@@ -35,15 +34,7 @@ Spectrogram {
 	createWindow {arg parent, boundsarg;
 		window = parent ? SCWindow("Spectrogram",  Rect(200, 450, 600, 300));
 		bounds = boundsarg ? window.view.bounds;
-		inwindow = parent.isNil.not;
 		this.setWindowImage;
-		if(parent.isNil, { // view is not in a user-defined window another drawhook is needed
-			window.drawHook_({
-				index = index+1;
-				image.drawInRect(window.view.bounds, image.bounds, 2, 1.0);
-				image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1))) ;
-			});
-		});
 		window.onClose_({
 			image.free;
 			this.stopruntask;
@@ -75,14 +66,12 @@ Spectrogram {
 							val = val * intensity;
 							fftDataArray[i] = colints.clipAt((val/16).round);
 						});
-						{ 
-						this.drawImg;
-						 window.refresh; }.defer;
+						{ window.refresh }.defer;
 					}); 
 					rate.reciprocal.wait; // framerate
 				}.loop; 
 			}).start;
-		}.defer(0.1); // allow the creation of fftbuf before starting
+		}.defer(0.1); // allow the creation of an fftbuf before starting
 	}
 
 	stopruntask {
@@ -139,34 +128,13 @@ Spectrogram {
 		if(image.isNil.not, {image.free});
 		image = SCImage.color(bounds.width, (tobin - frombin + 1), background);
 		index = 0;
-		if(inwindow, {
-			window.drawHook_({
-				index = index + 1;
-				//image.drawInRect(window.view.bounds.insetAll(30, 10, 42, 10), image.bounds, 2, 1.0);
-				image.drawInRect(bounds, image.bounds, 2, 1.0);
-				image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1))) ;
-				// fftDataArray.do({arg val, ind; image.setPixel(val,Êindex%bounds.width, ind) });
-			});
-		}, {
-		/*
-			window.drawHook_({
-				index = index + 1;
-				image.drawInRect(window.view.bounds.insetAll(30, 10, 42, 10), image.bounds, 2, 1.0);
-				//image.drawInRect(bounds, image.bounds, 2, 1.0);
-				image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1))) ;
-				// fftDataArray.do({arg val, ind; image.setPixel(val,Êindex%bounds.width, ind) });
-			});
-		*/
+		window.drawHook_({
+			index = index + 1;
+			image.drawInRect(bounds, image.bounds, 2, 1.0);
+			image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1))) ;
+			// fftDataArray.do({arg val, ind; image.setPixel(val,Êindex%bounds.width, ind) });
 		});
 	}
-	
-	
-	drawImg {
-		index = index + 1;
-		image.drawInRect(window.view.bounds.insetAll(30, 10, 42, 10), image.bounds, 2, 1.0);
-		image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1)));
-	}
-	
 	
 	start { this.startruntask }
 	
@@ -176,13 +144,11 @@ Spectrogram {
 
 SpectrogramWindow : Spectrogram { 
 	classvar <scopeOpen;
-	var startbutt, userview, mouseX, mouseY, mYIndex, mXIndex, freq, amp;
+	var startbutt, userview, mouseX, mouseY, mYIndex, mXIndex, freq;
 	var crosshaircolor;
 	
 	*new { 
-		//if(scopeOpen != true, { // block the stacking up of scope windows
-			^super.new;
-		//})
+		^super.new;
 	}
 
 	createWindow {
@@ -192,7 +158,6 @@ SpectrogramWindow : Spectrogram {
 		bounds = window.view.bounds.insetAll(30, 10, 40, 10); // resizable
 		font = Font("Helvetica", 10);
 		mouseX=30.5; mouseY=30.5;
-		inwindow = false;
 		crosshaircolor = Color.white;
 		this.setWindowImage;
 		
@@ -203,27 +168,35 @@ SpectrogramWindow : Spectrogram {
 			.focusColor_(Color.white.alpha_(0))
 			.resize_(5)
 			.backgroundImage_(image, 10)
+			.drawFunc_({			
+					index = index + 1;
+					image.drawInRect(window.view.bounds.insetAll(30, 10, 42, 10), image.bounds, 2, 1.0);
+					image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1)));
+			})
 			.mouseDownAction_({|view, mx, my|
 				crosshairCalcFunc.value(view, mx, my);
 				view.drawFunc_({
+					index = index + 1;
+					image.drawInRect(window.view.bounds.insetAll(30, 10, 42, 10), image.bounds, 2, 1.0);
+					image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1)));
 					Pen.color = crosshaircolor;
 					Pen.line( 29.5@mouseY, view.bounds.left+view.bounds.width@mouseY);
 					Pen.line(mouseX @ 10, mouseX @ (view.bounds.height+10));
-					/*
-					Pen.addRect( Rect(40.5, 20.5, 100, 40));
-					Pen.stringAtPoint( "X: "+mXIndex.asString, 50.5 @ 26.5);
-					Pen.stringAtPoint( "Y: "+mYIndex.asString, 92.5 @ 26.5);
-					Pen.stringAtPoint( "Freq: "+freq.asString, 50.5 @ 42.5);
-					*/
 					Pen.stringAtPoint( "freq: "+freq.asString, mouseX + 20 @ mouseY - 15);
-				//	Pen.stringAtPoint( "amp: "+amp.asString, mouseX + 85 @ mouseY - 15);
 					Pen.stroke;
 				});
 			})
 			.mouseMoveAction_({|view, mx, my| 
 				crosshairCalcFunc.value(view, mx, my);
 			})
-			.mouseUpAction_({|view, mx, my|Ê view.drawFunc_({nil}); view.refresh});
+			.mouseUpAction_({|view, mx, my|Ê 
+				view.drawFunc_({
+					index = index + 1;
+					image.drawInRect(window.view.bounds.insetAll(30, 10, 42, 10), image.bounds, 2, 1.0);
+					image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1)));
+				}); 
+				view.refresh;
+			});
 
 		crosshairCalcFunc = {|view, mx, my|
 			mouseX = (mx-1.5).clip(30, 30+view.bounds.width);
@@ -231,7 +204,6 @@ SpectrogramWindow : Spectrogram {
 			mXIndex = (mouseX-30).round(1); 
 			mYIndex = ((view.bounds.height+10)-mouseY).round(1); 
 			freq = binfreqs[mYIndex.linlin(0, view.bounds.height, frombin*2, tobin*2).floor(1)].round(0.01);
-			//amp = image.getPixel(mouseX,mouseY).rgbaArray;
 			view.refresh;
 		};
 		
@@ -285,7 +257,6 @@ SpectrogramWindow : Spectrogram {
 			.canFocus_(false)
 			.action_({ arg ch; var inbus;
 				this.setBufSize_( ch.items[ch.value].asInteger, startbutt.value.booleanValue );
-				userview.backgroundImage_(image, 10);
 				rangeslider.lo_(0).hi_(1).doAction;
 			});
 
@@ -366,6 +337,12 @@ SpectrogramWindow : Spectrogram {
 		}).front;
 	}
 	
+	setWindowImage { // overwrite the superclass method
+		if(image.isNil.not, {image.free});
+		image = SCImage.color(bounds.width, (tobin - frombin + 1), background);
+		index = 0;
+	}
+
 	start {
 		{startbutt.valueAction_(1)}.defer(0.5);
 	}
