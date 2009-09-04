@@ -9,7 +9,7 @@ Spectrogram {
 	var image, index, <>intensity, runtask;
 	var color, background, colints; // colints is an array of integers each representing a color
 	var userview, mouseX, mouseY, freq; // mYIndex, mXIndex, freq;
-	var crosshaircolor;
+	var crosshaircolor, running;
 
 	*new { arg parent, bounds, bufSize, color, background, lowfreq=0, highfreq=inf;
 		^super.new.initSpectrogram(parent, bounds, bufSize, color, background, lowfreq, highfreq);
@@ -23,13 +23,14 @@ Spectrogram {
 		fftbuf = Buffer.alloc(server, bufSize);
 		binfreqs = bufSize.collect({|i| ((server.sampleRate/2)/bufSize)*(i+1)});
 		index = 0;
-		intensity = 5;
+		intensity = 1;
 		background = bg ? Color.black;
 		color = col ? Color(1, 1, 1); // white by default
 		crosshaircolor = Color.white;
 		tobin = min(binfreqs.indexOf((highfreqarg/2).nearestInList(binfreqs)), bufSize / 2 - 1);
 		frombin = max(binfreqs.indexOf((lowfreqarg/2).nearestInList(binfreqs)), 0);
 		fftDataArray = Int32Array.fill((tobin - frombin + 1), 0);
+		running = false;		
 		this.sendSynthDef;
 		this.createWindow(parent, boundsarg);
 	}
@@ -61,9 +62,11 @@ Spectrogram {
 			.mouseDownAction_({|view, mx, my|
 				this.crosshairCalcFunc(view, mx, my);
 				view.drawFunc_({
-					index = index + 1;
-					image.drawInRect(view.bounds, image.bounds, 2, 1.0);
-					image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1)));
+					if(running, { // in case the view is stopped, but one still wants to use curser crosshair
+						index = index + 1;
+						image.drawInRect(view.bounds, image.bounds, 2, 1.0);
+						image.setPixels(fftDataArray, Rect(index%bounds.width, 0, 1, (tobin - frombin + 1)));
+					});
 					Pen.color = crosshaircolor;
 					Pen.line( view.bounds.left@mouseY, view.bounds.left+view.bounds.width@mouseY);
 					Pen.line(mouseX @ view.bounds.top, mouseX @ (view.bounds.height+view.bounds.top));
@@ -73,6 +76,7 @@ Spectrogram {
 			})
 			.mouseMoveAction_({|view, mx, my| 
 				this.crosshairCalcFunc(view, mx, my);
+				if(running.not, { view.refresh }); // refresh for curser crosshair
 			})
 			.mouseUpAction_({|view, mx, my|Ê 
 				view.drawFunc_({
@@ -91,6 +95,7 @@ Spectrogram {
 	}
 		
 	startruntask {
+		running = true;
 		this.recalcGradient;
 		{
 			runtask = Task({ 
@@ -100,10 +105,34 @@ Spectrogram {
 					{ arg buf;
 						var magarray, complexarray;
 						magarray = buf.clump(2)[(frombin .. tobin)].flop;
+
+						/*
+// OLD METHOD:
+						// magnitude spectrum
 						complexarray = (Complex( 
 								Signal.newFrom( magarray[0] ), 
 								Signal.newFrom( magarray[1] ) 
-							).magnitude.reverse*2).clip(0, 255); // times 2 in order to strenghten color
+						).magnitude.reverse*2).clip(0, 255); // times 2 in order to strenghten color
+						*/
+						
+// NEW METHOD:
+						/*
+						// log intensity - thanks nick 
+						// this crashes server atm., on resize and new buffer size
+						//20*log10(mag+1) * 4
+						complexarray = ((((Complex( 
+								Signal.newFrom( magarray[0] ), 
+								Signal.newFrom( magarray[1] ) 
+							).magnitude.reverse)+1).log10)*80).clip(0, 255); 
+						// That +1 above is the cause of the crash
+						// thus temporary fix below
+						*/	
+						
+						complexarray = ((((Complex( 
+								Signal.newFrom( magarray[0] ), 
+								Signal.newFrom( magarray[1] ) 
+						).magnitude.reverse)).log10)*80).clip(0, 255); 
+							
 						complexarray.do({|val, i|
 							val = val * intensity;
 							fftDataArray[i] = colints.clipAt((val/16).round);
@@ -117,6 +146,7 @@ Spectrogram {
 	}
 
 	stopruntask {
+		running = false;
 		runtask.stop;
 		try{fftSynth.free };
 	}
@@ -243,7 +273,7 @@ SpectrogramWindow : Spectrogram {
 				view.value_(view.value.asInteger.clip(1, 40));
 				this.intensity_(view.value);
 			})
-			.value_(5);
+			.value_(intensity);
 
 		StaticText(window, Rect(545, 122, 36, 16))
 			.font_(font)
@@ -269,7 +299,7 @@ SpectrogramWindow : Spectrogram {
 				var rangedval; 
 				rangedval = view.value.clip(lowfreq.value, (server.sampleRate/2));
 				view.value_( rangedval.nearestInList(binfreqs).round(1) );
-				rangeslider.hi_( view.value / (server.sampleRate/2) );
+				rangeslider.activeHi_( view.value / (server.sampleRate/2) );
 			})
 			.value_(22050);
 
@@ -305,7 +335,7 @@ SpectrogramWindow : Spectrogram {
 				var rangedval; 
 				rangedval = view.value.clip(0, highfreq.value);
 				view.value_( rangedval.nearestInList(binfreqs).round(1) );
-				rangeslider.lo_( view.value / (server.sampleRate/2) );
+				rangeslider.activeLo_( view.value / (server.sampleRate/2) );
 			})
 			.value_(0);
 
