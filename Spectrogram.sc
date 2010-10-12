@@ -1,5 +1,5 @@
 // changelog:
-//	- 30-Mar-10 made cross platform, fixed relativeOrigin issue
+//	- 30-Mar-10 made cross-platform, fixed relativeOrigin issue
 
 Spectrogram {
 	classvar <server;
