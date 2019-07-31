@@ -7,7 +7,7 @@
 	\organization: 	"ixi audio",
 	\country: 		"uk - es - is",
 	\since: 		"2008",
-	\ext_dependancy: "none",
+	\ext_dependency: "none",
 	\helpdoc:		"Spectrogram.html",
 	\url:            "http://www.ixi-audio.net"
 )
