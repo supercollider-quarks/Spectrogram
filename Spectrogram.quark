@@ -1,7 +1,7 @@
 (
 	\name: 		"Spectrogram",
 	\path: 		"Spectrogram",
-	\summary:	"A view and a window that gives spectral view of audio. Cocoa only (OSX)",
+	\summary:	"A view and a window that gives spectral view of audio.",
 	\author: 		"Thor Magnusson, Dan Stowell",
 	\version:		1.0,
 	\organization: 	"ixi audio",
