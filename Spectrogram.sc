@@ -58,7 +58,7 @@ Spectrogram {
 				var b = view.bounds;
 				Pen.use {
 					Pen.scale( b.width / imgWidth, b.height / imgHeight );
-					Pen.image( image );
+					Pen.drawImage( 0@0, image );
 				};
 				if( drawCrossHair, {
 					Pen.color = crosshaircolor;
@@ -175,7 +175,7 @@ Spectrogram {
 		if( image.notNil, { image.free });
 		imgWidth = width;
 		imgHeight = (tobin - frombin + 1); // bufSize.div(2);
-		image = Image.color(imgWidth, imgHeight, background);
+		image = Image.color(imgWidth.asInteger, imgHeight.asInteger, background);
 	}
 
 	setBufSize_ {arg buffersize, restart=true;
