@@ -1,0 +1,69 @@
+TITLE:: SpectrogramWindow
+summary:: a special Window for Spectrogram
+categories:: GUI>Interfaces
+related:: Classes/Spectrogram, Classes/FreqScope, Classes/Stethoscope
+
+DESCRIPTION::
+The code::SpectrogramWindow:: shows the spectrum of a sound of a specified audio bus. It can be resized.
+
+By clicking on the view, a crosshair cursor appears that indicates the frequency underneith.
+
+Panel commands:
+TABLE::
+##Power || Turns the scope on and off.
+##BusIn || The audio bus to be analyzed.
+##Int || The intensity of drawing from 0 to 40
+##winsize || The size of the FFT analysis window (power of two : 256, 512, 1024 or 2048)
+##range || The Frequency range displayed in the window. Values are scaled to bin frequencies (depending on window size).
+::
+
+note:: code::SpectrogramWindow:: also adds code::.spectrogram:: method to link::Classes/Function:::
+code::
+{LFNoise1.ar(MouseX.kr(10, 5000)) * SinOsc.ar(MouseY.kr(15000, 1000, 1))}.spectrogram;
+{LPF.ar(WhiteNoise.ar(1), LFNoise1.kr(1).range(20,12250))}.spectrogram;
+::
+::
+
+
+CLASSMETHODS::
+
+METHOD:: new
+Create a new SpectrogramWindow
+
+DISCUSSION::
+code::
+s.boot;
+// the special spectrogram window (like FreqScope)
+SpectrogramWindow.new;
+{LPF.ar(WhiteNoise.ar(1), LFNoise1.kr(1).range(20,12250))}.play;
+::
+
+private:: scopeOpen
+
+INSTANCEMETHODS::
+
+METHOD:: start
+Start analysis and drawing.
+METHOD:: stop
+Stop analysis and drawing.
+
+private:: createWindow
+
+EXAMPLES::
+
+code::
+s.boot;
+// as the SpectrogramWindow inherits from Spectrogram, we can change colors
+a = SpectrogramWindow.new;
+{LPF.ar(WhiteNoise.ar(1), LFNoise1.kr(1).range(20,12250))}.play;
+a.start;
+a.color_(Color.red);
+a.background_(Color.white);
+a.crosshairColor_(Color.black); // click and drag on the view
+a.stop;
+
+// analogously to .scope and .freqscope, spectrogram is also added as a method to Function, thus:
+{LFNoise1.ar(MouseX.kr(10, 4000)) * SinOsc.ar(MouseY.kr(15000, 1000, 1))}.spectrogram
+{LPF.ar(WhiteNoise.ar(1), LFNoise1.kr(1).range(20,12250))}.spectrogram;
+{Saw.ar(MouseX.kr(1, 1000))}.spectrogram;
+::

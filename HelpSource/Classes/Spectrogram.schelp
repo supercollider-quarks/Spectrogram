@@ -1,0 +1,173 @@
+TITLE:: Spectrogram
+summary:: a spectral analysis view
+categories:: GUI>Interfaces
+related:: Classes/SpectrogramWindow, Classes/FreqScope, Classes/Stethoscope
+
+DESCRIPTION::
+SuperCollider allows for various modes of graphical representations of sound. code::Spectrogram:: adds yet another mode (spectral view) to the Wave scope or the Frequency scope.
+
+code::Spectrogram:: comes in two modes, as a view that can be added to any link::Classes/Window::, and a special window that functions like the link::Classes/FreqScope:: window. See link::Classes/SpectrogramWindow:: which provides a GUI with controls over code::Spectrogram::'s paramters.
+
+note::
+The server must be running before using the spectrogram:
+code::
+s.boot;
+::
+::
+
+CLASSMETHODS::
+
+METHOD:: new
+Initialize the view, either in a Window or not.
+
+ARGUMENT:: parent
+A link::Classes/Window:: (optional).
+
+ARGUMENT:: bounds
+A link::Classes/Rect:: where the spectrogram appears in the parent (optional).
+
+ARGUMENT:: bufSize
+frames in FFT window. default: 1024. Use power-of-2 sizes, such as 512 or 2048.
+
+ARGUMENT:: color
+The foreground link::Classes/Color::.
+
+ARGUMENT:: background
+The background link::Classes/Color::.
+
+ARGUMENT:: lowfreq
+ARGUMENT:: highfreq
+Specify the range of frequencies you want to visualise.
+
+DISCUSSION::
+code::
+s.boot;
+// the spectrogram in a window
+w = Window.new("testing spectrogram", Rect(10,10, 600, 300)).front;
+a = Spectrogram.new(w, Rect(10, 10, 580, 280));
+a.start;
+{Saw.ar(LFNoise1.kr(1).range(20,2250))}.play;
+::
+
+
+
+private:: server
+
+
+INSTANCEMETHODS::
+
+METHOD:: start
+Starts analysis and drawing.
+
+METHOD:: stop
+Stop analysis and drawing.
+
+METHOD:: setBufSize
+Set the buffer size of the fft window.
+
+
+SUBSECTION:: Instance variables
+
+METHOD:: rate
+Refresh rate. Default is 25 frames per second
+
+METHOD:: intensity
+Intensity is how strong the drawn color is. Default value is 5.
+
+METHOD:: inbus
+The audio bus of analysis.
+
+METHOD:: color
+The color that is drawn.
+
+METHOD:: background
+The background color.
+
+DISCUSSION::
+code::
+s.boot;
+a = Spectrogram.new( color: Color.red);
+{LPF.ar(WhiteNoise.ar(1), LFNoise1.kr(1).range(20,12250))}.play;
+a.start;
+a.background_(Color.blue);
+a.color_(Color.black);
+::
+
+METHOD:: bufSize
+Number of frames in FFT window.
+
+PRIVATE:: startruntask
+
+PRIVATE:: setWindowImage
+
+PRIVATE:: sendSynthDef
+
+PRIVATE:: stopruntask
+
+PRIVATE:: crosshairColor
+
+PRIVATE:: setUserView
+
+PRIVATE:: createWindow
+
+PRIVATE:: recalcGradient
+
+PRIVATE:: prCreateImage
+
+PRIVATE:: crosshairCalcFunc
+
+PRIVATE:: fftbuf
+
+PRIVATE:: tobin
+
+PRIVATE:: frombin
+
+PRIVATE:: initSpectrogram
+
+EXAMPLES::
+
+code::
+s.boot;
+// a simple view for quick inspections of sound
+a = Spectrogram.new;
+a.start;
+// x = {AudioIn.ar(1)}.play // feedback warning!
+x = {LPF.ar(WhiteNoise.ar(1), LFNoise1.kr(1).range(20,12250))}.play;
+
+a.intensity = 15;
+a.rate = 25;
+a.color_(Color.red);
+a.background_(Color.green(alpha:0.1));
+
+// spectrogram in a window
+(
+w = Window.new("spectrogram".scramble, Rect(10,10, 600, 300)).front;
+a = Spectrogram.new(w, Rect(10, 10, 560, 260));
+a.start;
+{Saw.ar(LFNoise1.kr(1).range(20,2250))}.play;
+)
+
+// spectrogram in a window with different colors
+(
+w = Window.new("spectrogram".scramble, Rect(10,10, 600, 300)).front;
+a = Spectrogram.new(w, w.view.bounds.insetAll(30, 10, 42, 10), background:Color(0.2, 0.25, 0.2), color:Color.red);
+a.start;
+{Saw.ar(LFNoise1.kr(1).range(20,2250))}.play;
+)
+
+// an example showing where the low and high frequencies are scaled and large bufsize (FFT window)
+(
+w = Window.new("spectrogram".scramble, Rect(100,200, 600, 300)).front;
+a = Spectrogram.new(w, Rect(10, 10, 550, 280), bufSize: 2048, lowfreq:1000, highfreq:10000);
+a.start;
+{SinOsc.ar(MouseY.kr(22050,1).poll(10, "frequency: "))}.play;
+)
+
+{Saw.ar(MouseX.kr(1, 1000))}.play;
+
+// check also the spectrogram window
+(
+a = SpectrogramWindow.new;
+{SinOsc.ar(MouseY.kr(22050, 1).poll(10, "frequency: "))}.play
+)
+::
