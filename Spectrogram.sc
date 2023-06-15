@@ -16,7 +16,7 @@ Spectrogram {
 	*new { arg parent, bounds, bufSize, color, background, lowfreq=0, highfreq=inf;
 		^super.new.initSpectrogram(parent, bounds, bufSize, color, background, lowfreq, highfreq);
 	}
-	
+
 	initSpectrogram { arg parent, boundsarg, bufSizearg, col, bg, lowfreqarg, highfreqarg;
 		server = Server.default;
 		inbus = 0;
@@ -32,7 +32,7 @@ Spectrogram {
 		tobin = min(binfreqs.indexOf((highfreqarg/2).nearestInList(binfreqs)), bufSize.div(2) - 1);
 		frombin = max(binfreqs.indexOf((lowfreqarg/2).nearestInList(binfreqs)), 0);
 		fftDataArray = Int32Array.fill((tobin - frombin + 1), 0);
-		running = false;		
+		running = false;
 		this.sendSynthDef;
 		this.createWindow(parent, boundsarg);
 	}
@@ -76,30 +76,30 @@ Spectrogram {
 				drawCrossHair = true;
 				view.refresh;
 			})
-			.mouseMoveAction_({|view, mx, my| 
+			.mouseMoveAction_({|view, mx, my|
 				this.crosshairCalcFunc(view, mx, my);
 				view.refresh;
 			})
-			.mouseUpAction_({|view, mx, my|Ê 
+			.mouseUpAction_({|view, mx, my|
 				drawCrossHair = false;
 				view.refresh;
 			});
 	}
-	
+
 	sendSynthDef {
 		SynthDef(\spectroscope, {|inbus=0, buffer=0|
 			FFT(buffer, InFeedback.ar(inbus));
 		}).send(server);
 	}
-		
+
 	startruntask {
 		running = true;
 		this.recalcGradient;
 		{
-			runtask = Task({ 
+			runtask = Task({
 				fftSynth = Synth(\spectroscope, [\inbus, inbus, \buffer, fftbuf]);
 				{
-					fftbuf.getn(0, bufSize, 
+					fftbuf.getn(0, bufSize,
 					{ arg buf;
 						var magarray, complexarray;
 						magarray = buf.clump(2)[(frombin .. tobin)].flop;
@@ -107,30 +107,30 @@ Spectrogram {
 						/*
 // OLD METHOD:
 						// magnitude spectrum
-						complexarray = (Complex( 
-								Signal.newFrom( magarray[0] ), 
-								Signal.newFrom( magarray[1] ) 
+						complexarray = (Complex(
+								Signal.newFrom( magarray[0] ),
+								Signal.newFrom( magarray[1] )
 						).magnitude.reverse*2).clip(0, 255); // times 2 in order to strenghten color
 						*/
-						
+
 // NEW METHOD:
 						/*
-						// log intensity - thanks nick 
+						// log intensity - thanks nick
 						// this crashes server atm., on resize and new buffer size
 						//20*log10(mag+1) * 4
-						complexarray = ((((Complex( 
-								Signal.newFrom( magarray[0] ), 
-								Signal.newFrom( magarray[1] ) 
-							).magnitude.reverse)+1).log10)*80).clip(0, 255); 
+						complexarray = ((((Complex(
+								Signal.newFrom( magarray[0] ),
+								Signal.newFrom( magarray[1] )
+							).magnitude.reverse)+1).log10)*80).clip(0, 255);
 						// That +1 above is the cause of the crash
 						// thus temporary fix below
-						*/	
-						
-						complexarray = ((((Complex( 
-								Signal.newFrom( magarray[0] ), 
-								Signal.newFrom( magarray[1] ) 
-						).magnitude.reverse)).log10)*80).clip(0, 255); 
-							
+						*/
+
+						complexarray = ((((Complex(
+								Signal.newFrom( magarray[0] ),
+								Signal.newFrom( magarray[1] )
+						).magnitude.reverse)).log10)*80).clip(0, 255);
+
 						complexarray.do({|val, i|
 							val = val * intensity;
 							fftDataArray[i] = colints.clipAt((val/16).round);
@@ -140,9 +140,9 @@ Spectrogram {
 							index = index + 1;
 							if( userview.notClosed, { userview.refresh });
 						}.defer;
-					}); 
+					});
 					rate.reciprocal.wait; // framerate
-				}.loop; 
+				}.loop;
 			}).start;
 		}.defer(0.1); // allow the creation of an fftbuf before starting
 	}
@@ -152,7 +152,7 @@ Spectrogram {
 		runtask.stop;
 		try{fftSynth.free };
 	}
-	
+
 	inbus_ {arg inbusarg;
 		inbus = inbusarg;
 		fftSynth.set(\inbus, inbus);
@@ -161,8 +161,8 @@ Spectrogram {
 	color_ {arg colorarg;
 		color = colorarg;
 		this.recalcGradient;
-	}	
-	
+	}
+
 	background_ {arg backgroundarg;
 		background = backgroundarg;
 		this.prCreateImage( userview.bounds.width );
@@ -206,7 +206,7 @@ Spectrogram {
 
 	crosshairCalcFunc {|view, mx, my|
 		mouseX = (mx-1.5).clip(0, view.bounds.width);
-		mouseY = (my-1.5).clip(0, view.bounds.height); 
+		mouseY = (my-1.5).clip(0, view.bounds.height);
 		freq = binfreqs[((view.bounds.height)-mouseY).round(1).linlin(0, view.bounds.height, frombin*2, tobin*2).floor(1)].round(0.01);
 	}
 
@@ -214,37 +214,37 @@ Spectrogram {
 		this.prCreateImage( width );
 		index = 0;
 	}
-	
+
 	start { this.startruntask }
-	
+
 	stop { this.stopruntask }
-	
+
 }
 
-SpectrogramWindow : Spectrogram { 
+SpectrogramWindow : Spectrogram {
 	classvar <scopeOpen;
 	var startbutt;
-	
+
 	*new { ^super.new }
 
 	createWindow {
 		var cper, font;
 		var highfreq, lowfreq, rangeslider, freqtextarray;
 		var freqstringview, bounds, paramW;
-	
+
 		paramW = if( GUI.id == \cocoa, 36, 52 );
-	
+
 		scopeOpen = true;
 		window = Window("Spectrogram",  Rect(200, 450, 548 + paramW, 328));
 		bounds = window.view.bounds.insetAll(30, 10, paramW + 4, 10); // resizable
 		font = Font("Helvetica", 10);
 		mouseX=30.5; mouseY=30.5;
-		
+
 		this.setWindowImage( bounds.width );
 		super.setUserView(window, bounds);
-				
+
 		startbutt = Button(window, Rect(545, 10, paramW, 16))
-			.states_([["Power", Color.black, Color.clear], 
+			.states_([["Power", Color.black, Color.clear],
 					 ["Power", Color.black, Color.green.alpha_(0.2)]])
 			.action_({ arg view; if(view.value == 1, { this.startruntask }, { this.stopruntask }) })
 			.font_(font)
@@ -300,7 +300,7 @@ SpectrogramWindow : Spectrogram {
 			.font_(font)
 			.resize_(3)
 			.action_({ arg view;
-				var rangedval; 
+				var rangedval;
 				rangedval = view.value.clip(lowfreq.value, (server.sampleRate/2));
 				view.value_( rangedval.nearestInList(binfreqs).round(1) );
 				rangeslider.hi_( view.value / (server.sampleRate/2) );
@@ -325,7 +325,7 @@ SpectrogramWindow : Spectrogram {
 				spec = [lofreq, hifreq].asSpec;
 				freqtextarray = Array.fill(11, { arg i;
 					var val;
-					val = ((spec.map(0.1*(10-i))/1000).round(0.1)).asString; 
+					val = ((spec.map(0.1*(10-i))/1000).round(0.1)).asString;
 					if(val.contains(".").not, { val = val++".0"});
 					val
 				});
@@ -339,7 +339,7 @@ SpectrogramWindow : Spectrogram {
 			.font_(font)
 			.resize_(3)
 			.action_({ arg view;
-				var rangedval; 
+				var rangedval;
 				rangedval = view.value.clip(0, highfreq.value);
 				view.value_( rangedval.nearestInList(binfreqs).round(1) );
 				rangeslider.activeLo_( view.value / (server.sampleRate/2) );
@@ -351,41 +351,41 @@ SpectrogramWindow : Spectrogram {
 					((((server.sampleRate/2) / 10000)*(10-i)).round(0.1)).asString;
 				},{
 					((((server.sampleRate/2) / 10000)*(10-i)).round(0.1)).asString++".0";
-				});				
+				});
 			});
-				
+
 		freqstringview = UserView(window, Rect(0, 10, 29, bounds.height))
 			.resize_(4)
 			.canFocus_( false )
 			.drawFunc_({arg view;
 				Pen.font = Font( "Helvetica", 9);
 				Pen.color = Color.black;
-				11.do({ arg i; 
-					Pen.stringAtPoint(freqtextarray[i], Point(5, (i+0)*((view.bounds.height-12)/10))) 
+				11.do({ arg i;
+					Pen.stringAtPoint(freqtextarray[i], Point(5, (i+0)*((view.bounds.height-12)/10)))
 				});
 			});
-		
-		CmdPeriod.add( cper = { 
+
+		CmdPeriod.add( cper = {
 			if(startbutt.value == 1, {
 				startbutt.valueAction_(0);
 				AppClock.sched(0.5, { startbutt.valueAction_(1) });
 			});
 		 });
-		
+
 		window.onClose_({
 			image.free;
 			try{ fftSynth.free };
 			try{ fftbuf.free };
-			scopeOpen = false; 
+			scopeOpen = false;
 			this.stopruntask;
 			CmdPeriod.remove(cper);
 		}).front;
 	}
-	
+
 	start { {startbutt.valueAction_(1)}.defer(0.5) }
-	
+
 	stop { {startbutt.valueAction_(0)}.defer(0.5) }
-	
+
 }
 
 + Function {
