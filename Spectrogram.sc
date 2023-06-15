@@ -7,7 +7,7 @@ Spectrogram {
 	var <frombin, <tobin;
 	var image, imgWidth, imgHeight, index, <>intensity, runtask;
 	var color, background, colints; // colints is an array of integers each representing a color
-	var userview, mouseX, mouseY, freq, drawCrossHair = false;
+	var <userview, mouseX, mouseY, freq, drawCrossHair = false;
 	var crosshaircolor, running;
 
 	*new { arg parent, bounds, bufSize, color, background, lowfreq=0, highfreq=inf;
