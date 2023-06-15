@@ -5,7 +5,7 @@ Spectrogram {
 	var inbus, <>rate;
 	var <bufSize, binfreqs;	// size of FFT
 	var <frombin, <tobin;
-	var image, imgWidth, imgHeight, index, <>intensity, runtask;
+	var framebuffer, <seconds, image, imgWidth, imgHeight, <>intensity, runtask;
 	var color, background, colints; // colints is an array of integers each representing a color
 	var <userview, mouseX, mouseY, freq, drawCrossHair = false;
 	var crosshaircolor, running;
@@ -21,7 +21,6 @@ Spectrogram {
 		bufSize = bufSizearg ? 1024; // fft window
 		fftbuf = Buffer.alloc(server, bufSize);
 		binfreqs = bufSize.collect({|i| ((server.sampleRate/2)/bufSize)*(i+1)});
-		index = 0;
 		intensity = 1;
 		background = bg ? Color.black;
 		color = col ? Color(1, 1, 1); // white by default
@@ -38,7 +37,7 @@ Spectrogram {
 		var bounds;
 		window = parent ? Window("Spectrogram",  Rect(200, 450, 600, 300));
 		bounds = boundsarg ? window.view.bounds;
-		this.setWindowImage( bounds.width );
+		this.prCreateImage( bounds.width );
 		this.setUserView(window, bounds);
 		window.onClose_({
 			image.free;
@@ -133,8 +132,9 @@ Spectrogram {
 							fftDataArray[i] = colints.clipAt((val/16).round);
 						});
 						{
-							image.setPixels(fftDataArray, Rect(index%imgWidth, 0, 1, (tobin - frombin + 1)));
-							index = index + 1;
+							image.loadPixels(framebuffer, Rect(1, 0, imgWidth-1, imgHeight));
+							image.setPixels(framebuffer, Rect(0, 0, imgWidth-1, imgHeight));
+							image.setPixels(fftDataArray, Rect(imgWidth-1, 0, 1, imgHeight));
 							if( userview.notClosed, { userview.refresh });
 						}.defer;
 					});
@@ -167,11 +167,17 @@ Spectrogram {
 		userview.refresh;
 	}
 
+	seconds_ {arg secondsarg;
+		seconds = secondsarg;
+		this.prCreateImage( seconds * rate );
+	}
+
 	prCreateImage { arg width;
-		if( image.notNil, { image.free });
+		if( image.notNil, { image.free; framebuffer.free; });
 		imgWidth = width;
-		imgHeight = (tobin - frombin + 1); // bufSize.div(2);
+		imgHeight = (tobin - frombin + 1);
 		image = Image.color(imgWidth.asInteger, imgHeight.asInteger, background);
+		framebuffer = Int32Array.newClear(imgWidth * imgHeight);
 	}
 
 	setBufSize_ {arg buffersize, restart=true;
@@ -184,7 +190,7 @@ Spectrogram {
 			tobin = bufSize.div(2) - 1;
 			frombin = 0;
 			fftDataArray = Int32Array.fill((tobin - frombin + 1), 0);
-			this.setWindowImage( userview.bounds.width );
+			this.prCreateImage( userview.bounds.width );
 		}, {
 			"Buffersize has to be power of two (256, 1024, 2048, etc.)".warn;
 		});
@@ -204,11 +210,6 @@ Spectrogram {
 		mouseX = (mx-1.5).clip(0, view.bounds.width);
 		mouseY = (my-1.5).clip(0, view.bounds.height);
 		freq = binfreqs[((view.bounds.height)-mouseY).round(1).linlin(0, view.bounds.height, frombin*2, tobin*2).floor(1)].round(0.01);
-	}
-
-	setWindowImage { arg width;
-		this.prCreateImage( width );
-		index = 0;
 	}
 
 	start { this.startruntask }
@@ -236,7 +237,7 @@ SpectrogramWindow : Spectrogram {
 		font = Font("Helvetica", 10);
 		mouseX=30.5; mouseY=30.5;
 
-		this.setWindowImage( bounds.width );
+		this.prCreateImage( bounds.width );
 		super.setUserView(window, bounds);
 
 		startbutt = Button(window, Rect(545, 10, paramW, 16))
@@ -324,7 +325,7 @@ SpectrogramWindow : Spectrogram {
 					val
 				});
 				freqstringview.refresh;
-				this.setWindowImage( userview.bounds.width );
+				this.prCreateImage( userview.bounds.width );
 				userview.refresh;
 			});
 
