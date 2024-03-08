@@ -216,6 +216,7 @@ Spectrogram {
 
 	stop { this.stopruntask }
 
+	isRunning { ^if(running == true) { true } { false } }
 }
 
 SpectrogramWindow : Spectrogram {
