@@ -62,6 +62,9 @@ Starts analysis and drawing.
 METHOD:: stop
 Stop analysis and drawing.
 
+METHOD:: isRunning
+A Boolean, true if the spectrogram is active or false if the spectrogram has been stopped.
+
 METHOD:: setBufSize
 Set the buffer size of the fft window.
 
