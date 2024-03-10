@@ -41,7 +41,7 @@ Spectrogram {
 		this.setUserView(window, bounds);
 		window.onClose_({
 			image.free;
-			this.stopruntask;
+			if(this.isRunning) { this.stopruntask };
 			fftbuf.free;
 		}).front;
 	}
@@ -372,7 +372,7 @@ SpectrogramWindow : Spectrogram {
 			try{ fftSynth.free };
 			try{ fftbuf.free };
 			scopeOpen = false;
-			this.stopruntask;
+			if(this.isRunning) { this.stopruntask };
 			CmdPeriod.remove(cper);
 		}).front;
 	}
